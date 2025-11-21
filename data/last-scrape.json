@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-11-21T07:17:30.508Z",
+  "timestamp": "2025-11-21T11:38:31.603Z",
   "stats": {
-    "categoriesProcessed": 5,
-    "productsFound": 877,
-    "productsNew": 613,
-    "productsUpdated": 264,
+    "categoriesProcessed": 32,
+    "productsFound": 3474,
+    "productsNew": 0,
+    "productsUpdated": 3474,
     "priceChanges": 0,
     "errors": 0
   },

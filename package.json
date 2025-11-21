@@ -10,7 +10,6 @@
     "analyze": "node scripts/analyzer.js",
     "scrape": "node scripts/scrape.js",
     "scrape:test": "node scripts/scrape.js --test",
-    "scrape:trendyol": "node scripts/scrape-trendyol.js",
     "telegram:test": "node scripts/telegram-test.js"
   },
   "repository": {

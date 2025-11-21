@@ -570,7 +570,8 @@ body {
   flex-direction: column;
 }
 
-.color-code {
+.color-code,
+.color-name {
   font-weight: 600;
   color: var(--dark);
   font-size: 0.7rem;
@@ -592,6 +593,21 @@ body {
 /* Size Section - Compact */
 .size-section {
   margin-bottom: 1rem;
+}
+
+.color-sizes {
+  margin-bottom: 1rem;
+}
+
+.color-sizes:last-child {
+  margin-bottom: 0;
+}
+
+.color-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.4rem;
 }
 
 .size-grid {

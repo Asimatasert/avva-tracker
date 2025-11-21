@@ -121,18 +121,23 @@ async function recordStockHistory(productDbId, totalStock, inStock) {
   });
 }
 
-// Varyant stoklarını kaydet
-async function recordVariantStocks(productDbId, variantTypeValues) {
+// Varyant stoklarını kaydet (UPSERT - eski kayıtları güncelle)
+async function recordVariantStocks(productDbId, variantTypeValues, stockCode) {
   if (!variantTypeValues || variantTypeValues.length === 0) return;
 
+  // stockCode'dan renk kodunu çıkar: A42Y9405-05 -> 05
+  const colorCode = stockCode?.split('-')[1] || '';
+
+  // Önce bu ürünün eski varyant kayıtlarını sil
+  await db.query('DELETE FROM variant_stocks WHERE product_id = $1', [productDbId]);
+
   for (const variant of variantTypeValues) {
-    const color = variant.name;
     const subVariants = variant.subVariantValues || [];
 
     for (const sub of subVariants) {
       await db.create('variant_stocks', {
         product_id: productDbId,
-        color: color,
+        color: colorCode,
         size: sub.name,
         stock_amount: sub.stockAmount || 0
       });
@@ -283,6 +288,37 @@ async function getProductsWithoutTrendyol(limit = 100) {
   `, [limit]);
 }
 
+// Renk kodu kaydet veya güncelle
+async function upsertColorCode(code, name) {
+  if (!code || !name) return null;
+  return await db.upsert('color_codes', { code, name }, 'code');
+}
+
+// Renk kodlarını toplu kaydet (API'den gelen variantTypeValues'dan)
+async function saveColorCodesFromProduct(stockCode, variantTypeValues) {
+  if (!stockCode || !variantTypeValues) return;
+
+  const colorCode = stockCode.split('-')[1];
+  if (!colorCode) return;
+
+  // İlk varyant tipinin adı renk adıdır
+  const colorName = variantTypeValues[0]?.name;
+  if (colorName) {
+    await upsertColorCode(colorCode, colorName);
+  }
+}
+
+// Renk adını getir
+async function getColorName(code) {
+  const result = await db.findOne('color_codes', { code });
+  return result?.name || code;
+}
+
+// Tüm renk kodlarını getir
+async function getAllColorCodes() {
+  return await db.findAll('color_codes', {}, { orderBy: 'name' });
+}
+
 module.exports = {
   upsertCategory,
   upsertProduct,
@@ -301,5 +337,10 @@ module.exports = {
   getPriceComparison,
   getCheaperOnTrendyol,
   getCheaperOnAvva,
-  getProductsWithoutTrendyol
+  getProductsWithoutTrendyol,
+  // Renk kodları
+  upsertColorCode,
+  saveColorCodesFromProduct,
+  getColorName,
+  getAllColorCodes
 };

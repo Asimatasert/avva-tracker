@@ -152,7 +152,12 @@ class Scraper {
 
     // Varyant stokları (opsiyonel - çok veri üretir)
     if (this.options.recordVariants && product.variantTypeValues) {
-      await productService.recordVariantStocks(productDbId, product.variantTypeValues);
+      await productService.recordVariantStocks(productDbId, product.variantTypeValues, product.stockCode);
+    }
+
+    // Renk kodunu kaydet
+    if (product.stockCode && product.variantTypeValues) {
+      await productService.saveColorCodesFromProduct(product.stockCode, product.variantTypeValues);
     }
 
     // Telegram bildirimleri

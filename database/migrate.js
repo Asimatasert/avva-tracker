@@ -4,12 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const pool = require('../config/database');
 
-// Migration dosyaları sıralı şekilde
-const MIGRATIONS = [
-  'schema.sql',
-  'migration-002-trendyol.sql'
-];
-
 async function migrate() {
   console.log('🗄️  Database Migration\n');
 
@@ -20,13 +14,20 @@ async function migrate() {
     console.log(`  Host: ${process.env.DB_HOST || 'localhost'}`);
     console.log(`  Database: ${process.env.DB_NAME || 'avva_tracker'}\n`);
 
-    for (const file of MIGRATIONS) {
-      const filePath = path.join(__dirname, file);
+    // database/ dizinindeki tüm .sql dosyalarını bul ve sırala
+    // schema.sql önce, sonra migration-XXX dosyaları
+    const sqlFiles = fs.readdirSync(__dirname)
+      .filter(f => f.endsWith('.sql'))
+      .sort((a, b) => {
+        if (a === 'schema.sql') return -1;
+        if (b === 'schema.sql') return 1;
+        return a.localeCompare(b);
+      });
 
-      if (!fs.existsSync(filePath)) {
-        console.log(`⚠️  ${file} bulunamadı, atlanıyor...`);
-        continue;
-      }
+    console.log(`📂 ${sqlFiles.length} SQL dosyası bulundu\n`);
+
+    for (const file of sqlFiles) {
+      const filePath = path.join(__dirname, file);
 
       console.log(`📝 ${file} çalıştırılıyor...`);
       const sql = fs.readFileSync(filePath, 'utf8');

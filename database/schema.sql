@@ -66,6 +66,14 @@ CREATE TABLE IF NOT EXISTS variant_stocks (
     recorded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Renk kodları tablosu
+CREATE TABLE IF NOT EXISTS color_codes (
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(10) UNIQUE NOT NULL,         -- Renk kodu (05, 11, 101 vb.)
+    name VARCHAR(50) NOT NULL,                -- Renk adı (Beyaz, Lacivert vb.)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Fiyat alarmları tablosu
 CREATE TABLE IF NOT EXISTS price_alerts (
     id SERIAL PRIMARY KEY,

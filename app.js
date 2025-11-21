@@ -177,23 +177,27 @@ app.get('/product/:id', async (req, res) => {
     const product = productsResult.rows[0];
     const baseCode = product.stock_code.split('-')[0];
 
-    // Aynı ürünün diğer renkleri
+    // Aynı ürünün diğer renkleri (renk adı ile birlikte)
     const colorVariantsResult = await db.query(
-      `SELECT id, stock_code, SPLIT_PART(stock_code, '-', 2) as color_code,
-              name, current_price, image_url, in_stock
-       FROM products
-       WHERE SPLIT_PART(stock_code, '-', 1) = $1
-       ORDER BY stock_code`,
+      `SELECT p.id, p.stock_code, SPLIT_PART(p.stock_code, '-', 2) as color_code,
+              p.name, p.current_price, p.image_url, p.in_stock,
+              COALESCE(cc.name, SPLIT_PART(p.stock_code, '-', 2)) as color_name
+       FROM products p
+       LEFT JOIN color_codes cc ON cc.code = SPLIT_PART(p.stock_code, '-', 2)
+       WHERE SPLIT_PART(p.stock_code, '-', 1) = $1
+       ORDER BY p.stock_code`,
       [baseCode]
     );
 
-    // Beden stokları - base_code bazlı tüm renkler
+    // Beden stokları - base_code bazlı tüm renkler (renk adı ile)
     const sizesResult = await db.query(
-      `SELECT vs.color, vs.size, vs.stock_amount
+      `SELECT vs.color, vs.size, vs.stock_amount,
+              COALESCE(cc.name, vs.color) as color_name
        FROM variant_stocks vs
        JOIN products p ON vs.product_id = p.id
+       LEFT JOIN color_codes cc ON cc.code = vs.color
        WHERE SPLIT_PART(p.stock_code, '-', 1) = $1
-       ORDER BY
+       ORDER BY vs.color,
          CASE vs.size
            WHEN 'XS' THEN 1
            WHEN 'S' THEN 2
@@ -207,13 +211,15 @@ app.get('/product/:id', async (req, res) => {
       [baseCode]
     );
 
-    // Fiyat geçmişi - tüm renklerin (base_code bazlı)
+    // Fiyat geçmişi - tüm renklerin (base_code bazlı) - renk adı ile
     const priceHistoryResult = await db.query(
       `SELECT ph.price, ph.recorded_at,
               SPLIT_PART(p.stock_code, '-', 2) as color_code,
+              COALESCE(cc.name, SPLIT_PART(p.stock_code, '-', 2)) as color_name,
               p.stock_code
        FROM price_history ph
        JOIN products p ON ph.product_id = p.id
+       LEFT JOIN color_codes cc ON cc.code = SPLIT_PART(p.stock_code, '-', 2)
        WHERE SPLIT_PART(p.stock_code, '-', 1) = $1
        ORDER BY ph.recorded_at DESC`,
       [baseCode]

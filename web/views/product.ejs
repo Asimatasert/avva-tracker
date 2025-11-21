@@ -59,11 +59,11 @@
                 <a href="/product/<%= v.id %>" class="color-item <%= v.id == product.id ? 'active' : '' %>">
                   <div class="color-thumb">
                     <% if (v.image_url) { %>
-                      <img src="<%= v.image_url %>" alt="<%= v.color_code %>">
+                      <img src="<%= v.image_url %>" alt="<%= v.color_name %>">
                     <% } %>
                   </div>
                   <div class="color-info">
-                    <span class="color-code"><%= v.color_code %></span>
+                    <span class="color-name"><%= v.color_name %></span>
                     <span class="color-price"><%= formatPrice(v.current_price) %></span>
                     <span class="color-stock <%= v.in_stock ? 'in-stock' : 'out-stock' %>">
                       <%= v.in_stock ? 'Stokta' : 'Tükendi' %>
@@ -75,18 +75,33 @@
           </div>
         <% } %>
 
-        <!-- Beden Stokları -->
+        <!-- Beden Stokları - Renklere göre gruplandırılmış -->
         <% if (sizes.length > 0) { %>
           <div class="size-section">
             <h3>Beden Stokları</h3>
-            <div class="size-grid">
-              <% sizes.forEach(s => { %>
-                <div class="size-item <%= s.stock_amount > 0 ? 'available' : 'unavailable' %>">
-                  <span class="size-name"><%= s.size %></span>
-                  <span class="size-stock"><%= s.stock_amount %></span>
+            <%
+              // Renklere göre grupla
+              const sizesByColor = {};
+              sizes.forEach(s => {
+                if (!sizesByColor[s.color]) {
+                  sizesByColor[s.color] = { color_name: s.color_name, sizes: [] };
+                }
+                sizesByColor[s.color].sizes.push(s);
+              });
+            %>
+            <% Object.entries(sizesByColor).forEach(([colorCode, data]) => { %>
+              <div class="color-sizes">
+                <h4 class="color-label"><%= data.color_name %></h4>
+                <div class="size-grid">
+                  <% data.sizes.forEach(s => { %>
+                    <div class="size-item <%= s.stock_amount > 0 ? 'available' : 'unavailable' %>">
+                      <span class="size-name"><%= s.size %></span>
+                      <span class="size-stock"><%= s.stock_amount %></span>
+                    </div>
+                  <% }) %>
                 </div>
-              <% }) %>
-            </div>
+              </div>
+            <% }) %>
           </div>
         <% } %>
 
@@ -150,13 +165,13 @@
           </thead>
           <tbody>
             <% priceHistory.slice(0, 20).forEach((record, index, arr) => {
-              const prevRecord = arr.find((r, i) => i > index && r.color_code === record.color_code);
+              const prevRecord = arr.find((r, i) => i > index && r.color_name === record.color_name);
               const prevPrice = prevRecord?.price;
               const change = prevPrice ? ((record.price - prevPrice) / prevPrice * 100).toFixed(1) : 0;
             %>
               <tr>
                 <td><%= new Date(record.recorded_at).toLocaleDateString('tr-TR') %></td>
-                <td><span class="color-badge"><%= record.color_code %></span></td>
+                <td><span class="color-badge"><%= record.color_name %></span></td>
                 <td><%= formatPrice(record.price) %></td>
                 <td class="<%= change > 0 ? 'price-up' : change < 0 ? 'price-down' : '' %>">
                   <%= change != 0 ? (change > 0 ? '+' : '') + change + '%' : '-' %>
