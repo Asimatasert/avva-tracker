@@ -1,0 +1,212 @@
+[
+  {
+    "slug": "outlet",
+    "url": "https://www.avva.com.tr/outlet",
+    "categoryId": 1,
+    "name": "Sweatshirt",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-aksesuar",
+    "url": "https://www.avva.com.tr/erkek-aksesuar",
+    "categoryId": 9,
+    "name": "Parfüm",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-saat",
+    "url": "https://www.avva.com.tr/erkek-saat",
+    "categoryId": 12,
+    "name": "Saat",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-sapka",
+    "url": "https://www.avva.com.tr/erkek-sapka",
+    "categoryId": 13,
+    "name": "Şapka",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-kemer",
+    "url": "https://www.avva.com.tr/erkek-kemer",
+    "categoryId": 14,
+    "name": "Kemer",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-sal",
+    "url": "https://www.avva.com.tr/erkek-sal",
+    "categoryId": 15,
+    "name": "Şal",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-bileklik",
+    "url": "https://www.avva.com.tr/erkek-bileklik",
+    "categoryId": 34,
+    "name": "Bileklik",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-parfum",
+    "url": "https://www.avva.com.tr/erkek-parfum",
+    "categoryId": 51,
+    "name": "Parfüm",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-canta",
+    "url": "https://www.avva.com.tr/erkek-canta",
+    "categoryId": 52,
+    "name": "Çanta I Bavul",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-boxer",
+    "url": "https://www.avva.com.tr/erkek-boxer",
+    "categoryId": 68,
+    "name": "Boxer",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-eldiven",
+    "url": "https://www.avva.com.tr/erkek-eldiven",
+    "categoryId": 201,
+    "name": "Eldiven",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-corap",
+    "url": "https://www.avva.com.tr/erkek-corap",
+    "categoryId": 202,
+    "name": "Çorap",
+    "productCount": "?"
+  },
+  {
+    "slug": "yeni-sezon/erkek-gomlek",
+    "url": "https://www.avva.com.tr/yeni-sezon/erkek-gomlek",
+    "categoryId": 254,
+    "name": "Gömlek",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi/klasik-ayakkabi",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi/klasik-ayakkabi",
+    "categoryId": 440,
+    "name": "Ayakkabı | Sneaker ",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi/sneaker",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi/sneaker",
+    "categoryId": 441,
+    "name": "Ayakkabı | Sneaker ",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi/erkek-gunluk-ayakkabi",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi/erkek-gunluk-ayakkabi",
+    "categoryId": 442,
+    "name": "Ayakkabı | Sneaker ",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi/bot",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi/bot",
+    "categoryId": 443,
+    "name": "Bot",
+    "productCount": "?"
+  },
+  {
+    "slug": "yeni-sezon/erkek-yelek",
+    "url": "https://www.avva.com.tr/yeni-sezon/erkek-yelek",
+    "categoryId": 486,
+    "name": "Mont | Yelek",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi/sandalet-terlik",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi/sandalet-terlik",
+    "categoryId": 549,
+    "name": "Sandalet&Terlik",
+    "productCount": "?"
+  },
+  {
+    "slug": "yeni-sezon/erkek-t-shirt",
+    "url": "https://www.avva.com.tr/yeni-sezon/erkek-t-shirt",
+    "categoryId": 714,
+    "name": "T-Shirt",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ayakkabi",
+    "url": "https://www.avva.com.tr/erkek-ayakkabi",
+    "categoryId": 731,
+    "name": "Ayakkabı | Sneaker ",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-koleksiyon",
+    "url": "https://www.avva.com.tr/erkek-koleksiyon",
+    "categoryId": 738,
+    "name": "Sweatshirt",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-sweatshirt",
+    "url": "https://www.avva.com.tr/erkek-sweatshirt",
+    "categoryId": 740,
+    "name": "Sweatshirt",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-pantolon",
+    "url": "https://www.avva.com.tr/erkek-pantolon",
+    "categoryId": 741,
+    "name": "Pantolon",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-jean",
+    "url": "https://www.avva.com.tr/erkek-jean",
+    "categoryId": 742,
+    "name": "Jean",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-ceket",
+    "url": "https://www.avva.com.tr/erkek-ceket",
+    "categoryId": 743,
+    "name": "Blazer Ceket",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-kazak",
+    "url": "https://www.avva.com.tr/erkek-kazak",
+    "categoryId": 744,
+    "name": "Kazak | Hırka",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-mont",
+    "url": "https://www.avva.com.tr/erkek-mont",
+    "categoryId": 745,
+    "name": "Mont | Yelek",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-gomlek",
+    "url": "https://www.avva.com.tr/erkek-gomlek",
+    "categoryId": 750,
+    "name": "Gömlek",
+    "productCount": "?"
+  },
+  {
+    "slug": "erkek-yelek",
+    "url": "https://www.avva.com.tr/erkek-yelek",
+    "categoryId": 751,
+    "name": "Mont | Yelek",
+    "productCount": "?"
+  }
+]

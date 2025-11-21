@@ -1,0 +1,13 @@
+{
+  "timestamp": "2025-11-21T07:17:30.508Z",
+  "stats": {
+    "categoriesProcessed": 5,
+    "productsFound": 877,
+    "productsNew": 613,
+    "productsUpdated": 264,
+    "priceChanges": 0,
+    "errors": 0
+  },
+  "priceChanges": [],
+  "errors": []
+}
