@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= product.name %> - AVVA Tracker</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">AVVA Tracker</a>
+      <div class="nav-links">
+        <a href="/">Fırsat Merkezi</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <a href="/" class="back-link">&larr; Fırsat Merkezi'ne Dön</a>
+
+    <div class="product-detail">
+      <!-- Sol: Resim -->
+      <div class="product-detail-image">
+        <% if (product.image_url) { %>
+          <img src="<%= product.image_url %>" alt="<%= product.name %>">
+        <% } else { %>
+          <div class="no-image large">AVVA</div>
+        <% } %>
+      </div>
+
+      <!-- Sağ: Bilgiler -->
+      <div class="product-detail-info">
+        <div class="product-category-tag"><%= product.category || 'Genel' %></div>
+
+        <h1 class="product-title"><%= product.name %></h1>
+
+        <div class="product-meta-row">
+          <span class="stock-code">Ürün Kodu: <strong><%= baseCode %></strong></span>
+          <span class="stock-status <%= product.in_stock ? 'in-stock' : 'out-stock' %>">
+            <%= product.in_stock ? 'Stokta' : 'Tükendi' %>
+          </span>
+        </div>
+
+        <!-- Fiyat Kutusu -->
+        <div class="price-box">
+          <div class="price-row">
+            <span class="main-price"><%= formatPrice(product.current_price) %></span>
+          </div>
+        </div>
+
+        <!-- Renk Varyantları -->
+        <% if (colorVariants.length > 1) { %>
+          <div class="color-section">
+            <h3>Renkler (<%= colorVariants.length %> renk)</h3>
+            <div class="color-list">
+              <% colorVariants.forEach(v => { %>
+                <a href="/product/<%= v.id %>" class="color-item <%= v.id == product.id ? 'active' : '' %>">
+                  <div class="color-thumb">
+                    <% if (v.image_url) { %>
+                      <img src="<%= v.image_url %>" alt="<%= v.color_code %>">
+                    <% } %>
+                  </div>
+                  <div class="color-info">
+                    <span class="color-code"><%= v.color_code %></span>
+                    <span class="color-price"><%= formatPrice(v.current_price) %></span>
+                    <span class="color-stock <%= v.in_stock ? 'in-stock' : 'out-stock' %>">
+                      <%= v.in_stock ? 'Stokta' : 'Tükendi' %>
+                    </span>
+                  </div>
+                </a>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Beden Stokları -->
+        <% if (sizes.length > 0) { %>
+          <div class="size-section">
+            <h3>Beden Stokları</h3>
+            <div class="size-grid">
+              <% sizes.forEach(s => { %>
+                <div class="size-item <%= s.stock_amount > 0 ? 'available' : 'unavailable' %>">
+                  <span class="size-name"><%= s.size %></span>
+                  <span class="size-stock"><%= s.stock_amount %></span>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <!-- Fiyat İstatistikleri -->
+        <div class="price-stats">
+          <div class="stat-box">
+            <span class="stat-label">En Düşük</span>
+            <span class="stat-value low"><%= formatPrice(priceStats.min_price) %></span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">En Yüksek</span>
+            <span class="stat-value high"><%= formatPrice(priceStats.max_price) %></span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Ortalama</span>
+            <span class="stat-value"><%= formatPrice(priceStats.avg_price) %></span>
+          </div>
+        </div>
+
+        <!-- AVVA Link -->
+        <% if (product.url) { %>
+          <a href="<%= product.url %>" target="_blank" class="avva-link">
+            AVVA'da Görüntüle &rarr;
+          </a>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Fiyat Geçmişi Grafiği -->
+    <div class="chart-section">
+      <h2>Fiyat Geçmişi</h2>
+
+      <div class="chart-filters">
+        <button class="chart-filter active" data-days="7">7 Gün</button>
+        <button class="chart-filter" data-days="30">30 Gün</button>
+        <button class="chart-filter" data-days="90">90 Gün</button>
+        <button class="chart-filter" data-days="0">Tümü</button>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="priceChart"></canvas>
+      </div>
+
+      <% if (priceHistory.length === 0) { %>
+        <p class="no-history">Henüz fiyat geçmişi bulunmuyor.</p>
+      <% } %>
+    </div>
+
+    <!-- Fiyat Geçmişi Tablosu -->
+    <% if (priceHistory.length > 0) { %>
+      <div class="history-table-section">
+        <h2>Fiyat Kayıtları (<%= baseCode %>)</h2>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Tarih</th>
+              <th>Renk</th>
+              <th>Fiyat</th>
+              <th>Değişim</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% priceHistory.slice(0, 20).forEach((record, index, arr) => {
+              const prevRecord = arr.find((r, i) => i > index && r.color_code === record.color_code);
+              const prevPrice = prevRecord?.price;
+              const change = prevPrice ? ((record.price - prevPrice) / prevPrice * 100).toFixed(1) : 0;
+            %>
+              <tr>
+                <td><%= new Date(record.recorded_at).toLocaleDateString('tr-TR') %></td>
+                <td><span class="color-badge"><%= record.color_code %></span></td>
+                <td><%= formatPrice(record.price) %></td>
+                <td class="<%= change > 0 ? 'price-up' : change < 0 ? 'price-down' : '' %>">
+                  <%= change != 0 ? (change > 0 ? '+' : '') + change + '%' : '-' %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } %>
+  </main>
+
+  <footer class="footer">
+    <p>AVVA Fiyat Takip Sistemi</p>
+  </footer>
+
+  <script>
+    // Fiyat verisi - tarihe göre grupla, ortalama al
+    const rawData = <%= JSON.stringify(priceHistory.map(h => ({
+      date: h.recorded_at,
+      price: parseFloat(h.price)
+    }))) %>;
+
+    // Tarihe göre grupla ve ortalama fiyat al
+    const grouped = {};
+    rawData.forEach(d => {
+      const dateKey = new Date(d.date).toLocaleDateString('tr-TR');
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = { sum: 0, count: 0 };
+      }
+      grouped[dateKey].sum += d.price;
+      grouped[dateKey].count++;
+    });
+
+    const priceData = Object.entries(grouped)
+      .map(([date, val]) => ({ date, price: val.sum / val.count }))
+      .reverse();
+
+    // Chart.js
+    if (priceData.length > 0) {
+      const ctx = document.getElementById('priceChart').getContext('2d');
+
+      const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: priceData.map(d => d.date),
+          datasets: [{
+            label: 'Ort. Fiyat (TL)',
+            data: priceData.map(d => d.price),
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 3,
+            pointHoverRadius: 5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              ticks: {
+                callback: value => value.toLocaleString('tr-TR') + ' TL'
+              }
+            }
+          }
+        }
+      });
+
+      // Filtre butonları
+      document.querySelectorAll('.chart-filter').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.chart-filter').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const days = parseInt(btn.dataset.days);
+          let filtered = priceData;
+
+          if (days > 0) {
+            filtered = priceData.slice(-days);
+          }
+
+          chart.data.labels = filtered.map(d => d.date);
+          chart.data.datasets[0].data = filtered.map(d => d.price);
+          chart.update();
+        });
+      });
+    }
+  </script>
+</body>
+</html>

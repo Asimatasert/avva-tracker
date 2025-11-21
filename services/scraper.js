@@ -6,7 +6,7 @@ class Scraper {
   constructor(options = {}) {
     this.options = {
       verbose: true,
-      recordVariants: false,
+      recordVariants: true,
       notifyPriceDrops: true,      // Fiyat düşüşü bildirimi
       notifyPriceIncreases: false, // Fiyat artışı bildirimi
       notifyNewProducts: false,    // Yeni ürün bildirimi
